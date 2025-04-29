@@ -1,45 +1,136 @@
-<?php // routes.php ?>
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KoratWalk - เลือกเส้นทาง</title>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เส้นทาง</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .screen {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .fa-bell {
+        padding: 20px;
+        background-color: red;
+        color: white;
+        border-radius: 30px;
+        font-size: 25px;
+    }
+
+    .icon-bell {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    .header {
+        background-color: #a8dde1;
+        padding: 7rem 2rem 1rem 2rem;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        max-width: 800px;
+        width: 100%;
+    }
+
+    .header h2 {
+        color: black;
+        margin: 5px 0;
+        font-size: 20px;
+    }
+
+    h1 {
+        color: black;
+    }
+
+    .form-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 4rem 2rem;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .btn-submit {
+        background-color: #5371cb;
+        color: white;
+        font-weight: bold;
+        font-size: 25px;
+        padding: 20px 30px;
+        width: auto;
+        border: none;
+        border-radius: 40px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .btn-submit:hover {
+        background-color: #5371cb;
+    }
+
+    .form-container img {
+        width: -webkit-fill-available;
+        margin-bottom: 1rem;
+    }
+
+    .tab {
+        margin-top: 20px;
+    }
+    </style>
 </head>
+
 <body>
-  <div class="screen">
-    <h2>เลือกเส้นทางเดิน</h2>
-    <p>ที่เพลิดเพลินด้วยตัวคุณเอง</p>
-    <div class="route">
-      <img src="https://i.imgur.com/ljA9qtW.png" alt="route1">
-      <div>
-        <strong>เส้นทางที่ 1</strong><br>
-        ไหว้พระขอพร ระยะทาง 2.4 กิโลเมตร
-      </div>
+    <div class="screen">
+        <div class="icon-bell">
+            <i class="fa-solid fa-bell"></i>
+        </div>
+
+        <div class="header">
+            <h1 style="font-size: 40px;">เลือกเส้นทาง</h1>
+            <h2>ที่เพลิดเพลินด้วยตัวคุณเอง</h2>
+            <br>
+        </div>
+
+        <div class="form-wrapper">
+            <div class="form-container">
+                <img src="img/route1.jpg" alt="ทางเดินที่1" class="header-image">
+                <img src="img/route2.jpg" alt="ทางเดินที่2" class="header-image">
+                <img src="img/route3.jpg" alt="ทางเดินที่3" class="header-image">
+                <img src="img/route4.jpg" alt="ทางเดินที่4" class="header-image">
+                <div class="tab"></div>
+                <button class="btn-submit" onclick="location.href='menu.php'">กลับสู่เมนูหลัก</button>
+
+            </div>
+        </div>
     </div>
-    <div class="route">
-      <img src="https://i.imgur.com/s1hM43s.png" alt="route2">
-      <div>
-        <strong>เส้นทางที่ 2</strong><br>
-        ชมงานศิลป์ในโคราช ระยะทาง 1.5 กิโลเมตร
-      </div>
-    </div>
-    <div class="route">
-      <img src="https://i.imgur.com/jIXRMiE.png" alt="route3">
-      <div>
-        <strong>เส้นทางที่ 3</strong><br>
-        ตลาดชุมชน ระยะทาง 2.0 กิโลเมตร
-      </div>
-    </div>
-    <div class="route">
-      <img src="https://i.imgur.com/J8NBjvT.png" alt="route4">
-      <div>
-        <strong>เส้นทางที่ 4</strong><br>
-        ริมดูงานศิลป์ ระยะทาง 900 เมตร
-      </div>
-    </div>
-  </div>
 </body>
+
 </html>

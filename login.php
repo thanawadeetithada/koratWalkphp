@@ -1,30 +1,173 @@
 <?php // login.php ?>
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KoratWalk - Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KoratWalk - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .screen {
+        max-width: 400px;
+        width: 100%;
+        background-color: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .screen img {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-align: center;
+        color: #333;
+    }
+
+    p {
+        text-align: center;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .input-field {
+        margin: 10px 0;
+        border: none;
+        font-size: 23px;
+        width: 100%;
+        padding: 10px 4.5rem;
+        box-sizing: border-box;
+        background-color: #a8dde2;
+        border-radius: 30px;
+    }
+
+    .input-field:focus {
+        border: none;
+        outline: none;
+        box-shadow: 0;
+    }
+
+    .btn {
+        width: fit-content;
+        padding: .5rem 2rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #5371cb;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #5371cb;
+    }
+
+    .menu-btn {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        margin-bottom: 10px;
+        background-color: #e3e9ff;
+        border-radius: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        color: #000;
+    }
+
+    .menu-btn img {
+        width: 30px;
+        margin-right: 15px;
+    }
+
+    .input-container {
+        position: relative;
+        margin: 10px auto;
+        box-sizing: border-box;
+        background-color: #a8dde2;
+        border: none;
+        border-radius: 40px;
+    }
+
+    .input-container i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a8dde2;
+        background-color: white;
+        padding: 15px;
+        border-radius: 30px;
+        font-size: x-large;
+    }
+
+    .btn {
+        width: fit-content;
+        padding: .5rem 2rem;
+        border: none;
+        border-radius: 30px;
+        background-color: #5371cb;
+        color: white;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #5371cb;
+    }
+    </style>
 </head>
+
 <body>
-  <div class="screen">
-    <img src="img/Login.jpg" alt="elderly">
-    <h2 style="color: black;"><span>กรุณากรอกชื่อ</span></h2>
-    <br>
-    <form action="menu.php" method="post" style="text-align: center;">
-      <input class="input-field" type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required>
-      <input class="input-field" type="password" name="password" placeholder="รหัสผ่าน" required>
-      <div style="text-align: right; width: 90%; margin: 5px auto 15px;">
-        <a href="forgot-password.php" style="font-size: 16px; color: orange; text-decoration: none;">ลืมรหัสผ่าน?</a>
-      </div>
-      
-      <button class="btn" type="submit">เข้าสู่ระบบ</button><br><br>
-      <p style="font-size: 16px;">
-        <a href="register.php" style="text-decoration: none; color: black;">ลงทะเบียน</a>
-      </p>
-    </form>
-  </div>
+    <div class="screen">
+        <img src="img/Login.jpg" alt="elderly">
+        <h1 style="color: #695956;"><span>กรุณากรอกชื่อ</span></h1>
+        <br>
+        <form action="menu.php" method="post" style="text-align: center;">
+            <div class="input-container">
+                <i class="fa-solid fa-user"></i>
+                <input class="input-field" type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required>
+            </div>
+
+            <div class="input-container">
+                <i class="fa-solid fa-key"></i>
+                <input class="input-field" type="password" name="password" placeholder="รหัสผ่าน" required>
+            </div>
+
+            <div style="text-align: right; width: 90%; margin: 5px auto 15px;">
+                <a href="forgot-password.php"
+                    style="font-size: 20px; color: orange; text-decoration: none;">ลืมรหัสผ่าน?</a>
+            </div>
+
+            <button class="btn" type="submit">เข้าสู่ระบบ</button><br><br>
+            <p style="font-size: 20px;">
+                <a href="register.php" style="text-decoration: none; color: black;">ลงทะเบียน</a>
+            </p>
+        </form>
+    </div>
 </body>
+
 </html>
