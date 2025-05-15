@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KoratWalk - Login</title>
+    <title>KoratWalk</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -65,10 +65,11 @@
         border-radius: 30px;
     }
 
-    .input-field:focus {
+    .input-field:focus, .input-field:hover {
         border: none;
         outline: none;
         box-shadow: 0;
+        background-color: #a8dde2;
     }
 
     .btn {
@@ -146,15 +147,17 @@
         <img src="img/Login.jpg" alt="elderly">
         <h1 style="color: #695956;"><span>กรุณากรอกชื่อ</span></h1>
         <br>
-        <form action="menu.php" method="post" style="text-align: center;">
-            <div class="input-container">
+        <form method="POST" action="verify_otp.php" style="text-align: center;"> 
+        <div class="input-container">
                 <i class="fa-solid fa-user"></i>
-                <input class="input-field" type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required>
+                <input class="input-field" type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required autocomplete="off">
+
             </div>
 
             <div class="input-container">
                 <i class="fa-solid fa-key"></i>
-                <input class="input-field" type="password" name="password" placeholder="รหัสผ่าน" required>
+                <input class="input-field" type="text"name="otp" placeholder="รหัสผ่าน OTP" required>
+
             </div>
 
             <div style="text-align: right; width: 90%; margin: 5px auto 15px;">

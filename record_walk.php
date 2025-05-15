@@ -1,3 +1,22 @@
+<?php
+session_start();
+require_once 'db.php';
+
+$user_id = $_SESSION['user_id'] ?? 0;
+$data = [];
+
+if ($user_id) {
+    $stmt = $conn->prepare("SELECT distance, steps, calories, created_at FROM walk_summary WHERE user_id = ? ORDER BY created_at DESC");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="th">
 
@@ -82,39 +101,33 @@
     .button:hover {
         background-color: #3a54c0;
     }
-
-
     </style>
 </head>
 
 <body>
     <div class="icon-bell">
-        <i class="fa-solid fa-bell"></i>
+        <a href="tel:1669" style="text-decoration: none;">
+            <i class="fa-solid fa-bell"></i>
+        </a>
     </div>
-
 
     <h1>บันทึกการเดินของฉัน</h1>
-
+    <?php if (empty($data)): ?>
+    <p>ยังไม่มีข้อมูลการเดิน</p>
+    <?php else: ?>
+    <?php foreach ($data as $row): ?>
     <div class="card">
-        <div class="row"><span class="label">วันที่</span></div>
-        <div class="row"><span class="label">ระยะทาง</span> <span class="label">เมตร</span></div>
-        <div class="row"><span class="label">จำนวนการเดิน</span> <span class="label">ก้าว</span></div>
-        <div class="row"><span class="label">แคลอรี่ที่เผาผลาญ</span> <span class="label">แคลอรี่</span></div>
+        <div class="row"><span class="label">วันที่</span> <span
+                class="label"><?= date("d/m/Y H:i", strtotime($row['created_at'])) ?></span></div>
+        <div class="row"><span class="label">ระยะทาง</span> <span class="label"><?= round($row['distance'], 2) ?>
+                เมตร</span></div>
+        <div class="row"><span class="label">จำนวนการเดิน</span> <span class="label"><?= $row['steps'] ?> ก้าว</span>
+        </div>
+        <div class="row"><span class="label">แคลอรี่ที่เผาผลาญ</span> <span class="label"><?= $row['calories'] ?>
+                แคลอรี่</span></div>
     </div>
-
-    <div class="card">
-        <div class="row"><span class="label">วันที่</span> </div>
-        <div class="row"><span class="label">ระยะทาง</span><span class="label">เมตร</span></div>
-        <div class="row"><span class="label">จำนวนการเดิน</span> <span class="label">ก้าว</span></div>
-        <div class="row"><span class="label">แคลอรี่ที่เผาผลาญ</span> <span class="label">แคลอรี่</span></div>
-    </div>
-
-    <div class="card">
-        <div class="row"><span class="label">วันที่</span></div>
-        <div class="row"><span class="label">ระยะทาง</span> <span class="label">เมตร</span></div>
-        <div class="row"><span class="label">จำนวนการเดิน</span> <span class="label">ก้าว</span></div>
-        <div class="row"><span class="label">แคลอรี่ที่เผาผลาญ</span> <span class="label">แคลอรี่</span></div>
-    </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
 
     <button class="button" onclick="location.href='menu.php'">กลับสู่เมนูหลัก</button>
 </body>

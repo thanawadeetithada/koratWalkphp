@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="th">
 
@@ -113,12 +114,14 @@
 <body>
     <div class="screen">
         <div class="icon-bell">
-            <i class="fa-solid fa-bell"></i>
+            <a href="tel:1669" style="text-decoration: none;">
+                <i class="fa-solid fa-bell"></i>
+            </a>
         </div>
 
         <div class="header">
             <img src="img/Welcome_menu.jpg" style="width: 80%;" alt="คู่มือการใช้งาน" class="header-image">
-            <p class="username">คุณสมชาย</p>
+            <p class="username">คุณ <?= htmlspecialchars($_SESSION['firstname'] ?? 'ผู้ใช้ทั่วไป') ?></p>
 
             <img src="img/Welcome_menu2.jpg" style="width: 80%;" alt="คู่มือการใช้งาน" class="header-image">
             <br>
@@ -138,6 +141,13 @@
             </div>
         </div>
     </div>
+    <script>
+    // Log session data to browser console
+    console.log("User ID:", <?= json_encode($_SESSION['user_id'] ?? null) ?>);
+    console.log("Username:", <?= json_encode($_SESSION['username'] ?? '') ?>);
+    console.log("Firstname:", <?= json_encode($_SESSION['firstname'] ?? '') ?>);
+    console.log("Lastname:", <?= json_encode($_SESSION['lastname'] ?? '') ?>);
+    console.log("Phone:", <?= json_encode($_SESSION['phone'] ?? '') ?>);
+</script>
 </body>
-
 </html>

@@ -97,7 +97,7 @@
     }
 
     .form-container img {
-        width: -webkit-fill-available;
+        width: 100%;
         margin-bottom: 1rem;
     }
 
@@ -110,7 +110,9 @@
 <body>
     <div class="screen">
         <div class="icon-bell">
-            <i class="fa-solid fa-bell"></i>
+            <a href="tel:1669" style="text-decoration: none;">
+                <i class="fa-solid fa-bell"></i>
+            </a>
         </div>
 
         <div class="header">
@@ -121,10 +123,19 @@
 
         <div class="form-wrapper">
             <div class="form-container">
-                <img src="img/route1.jpg" alt="ทางเดินที่1" class="header-image">
-                <img src="img/route2.jpg" alt="ทางเดินที่2" class="header-image">
-                <img src="img/route3.jpg" alt="ทางเดินที่3" class="header-image">
-                <img src="img/route4.jpg" alt="ทางเดินที่4" class="header-image">
+                <a href="route1.php">
+                    <img src="img/route1.jpg" alt="ทางเดินที่1" class="header-image">
+                </a>
+                <a href="route2.php">
+                    <img src="img/route2.jpg" alt="ทางเดินที่2" class="header-image">
+                </a>
+                <a href="route3.php">
+                    <img src="img/route3.jpg" alt="ทางเดินที่3" class="header-image">
+                </a>
+                <a href="route4.php">
+                    <img src="img/route4.jpg" alt="ทางเดินที่4" class="header-image">
+                </a>
+
                 <div class="tab"></div>
                 <button class="btn-submit" onclick="location.href='menu.php'">กลับสู่เมนูหลัก</button>
 
