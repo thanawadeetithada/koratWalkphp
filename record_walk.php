@@ -32,7 +32,6 @@ if ($user_id) {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Prompt', sans-serif;
     }
 
     body {
@@ -88,14 +87,17 @@ if ($user_id) {
     }
 
     .button {
-        background-color: #4a65d3;
+        background-color: #5371cb;
         color: white;
-        font-size: 30px;
         font-weight: bold;
+        font-size: 25px;
         padding: 20px 30px;
+        width: auto;
         border: none;
         border-radius: 40px;
         cursor: pointer;
+        display: block;
+        margin: 0 auto;
     }
 
     .button:hover {
@@ -113,7 +115,8 @@ if ($user_id) {
 
     <h1>บันทึกการเดินของฉัน</h1>
     <?php if (empty($data)): ?>
-    <p>ยังไม่มีข้อมูลการเดิน</p>
+    <h2>ยังไม่มีข้อมูลการเดิน</h2>
+    <br>
     <?php else: ?>
     <?php foreach ($data as $row): ?>
     <div class="card">
@@ -128,7 +131,6 @@ if ($user_id) {
     </div>
     <?php endforeach; ?>
     <?php endif; ?>
-
     <button class="button" onclick="location.href='menu.php'">กลับสู่เมนูหลัก</button>
 </body>
 

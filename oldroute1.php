@@ -129,10 +129,93 @@
             <div id="custom-pins"></div> <!-- ✅ เพิ่มตรงนี้ -->
         </div>
 
-        <button id="start-btn" onclick="toggleTracking()">🚶‍♂️ เริ่มเดินทาง</button>
+        <!-- <button id="start-btn" onclick="toggleTracking()">🚶‍♂️ เริ่มเดินทาง</button> -->
+        <button id="start-btn" onclick="mockStart()">🚶‍♂️ เริ่ม Mock การเดินทาง</button>
+
     </div>
 
     <script>
+    const mockLocations = [{
+            lat: 14.97472,
+            lng: 102.09785
+        },
+        {
+            lat: 14.97473,
+            lng: 102.09851
+        },
+        {
+            lat: 14.97417,
+            lng: 102.10017
+        },
+        {
+            lat: 14.97462,
+            lng: 102.10151
+        },
+    ];
+
+    let currentIndex = 0;
+
+    function updateMarkerPosition(pos) {
+        // คำนวณตำแหน่ง x, y บนภาพ
+        const topLat = 14.980050;
+        const leftLng = 102.090380;
+        const bottomLat = 14.970218;
+        const rightLng = 102.114147;
+
+        const mapImg = document.getElementById("map");
+        const imageWidth = mapImg.clientWidth;
+        const imageHeight = mapImg.clientHeight;
+
+        const x = ((pos.lng - leftLng) / (rightLng - leftLng)) * imageWidth;
+        const y = ((topLat - pos.lat) / (topLat - bottomLat)) * imageHeight;
+
+        const userIcon = document.getElementById("user-location");
+        userIcon.style.left = `${x}px`;
+        userIcon.style.top = `${y}px`;
+
+        // ปรับตำแหน่งแผนที่ (container) ให้หมุดอยู่กลางหน้าจอ
+        const wrapper = document.getElementById("map-wrapper");
+        const container = document.getElementById("map-container");
+        const scale = 2.5; // ใช้ scale ปัจจุบันที่กำหนด
+        const posX = wrapper.clientWidth / 2 - x * scale;
+        const posY = wrapper.clientHeight / 2 - y * scale;
+
+        container.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
+
+    function moveMarkerAndSave() {
+        if (currentIndex < mockLocations.length) {
+            const pos = mockLocations[currentIndex];
+            updateMarkerPosition(pos);
+
+            currentIndex++;
+
+            setTimeout(moveMarkerAndSave, 1000);
+        } else {
+            saveLocationsToDB();
+        }
+    }
+
+    function saveLocationsToDB() {
+        fetch('save_gps.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    locations: mockLocations
+                })
+            })
+            .then(res => res.json())
+            .then(data => console.log('บันทึกข้อมูลสำเร็จ', data))
+            .catch(err => console.error('เกิดข้อผิดพลาด', err));
+    }
+
+
+    // เรียกฟังก์ชันเริ่มเลื่อน marker
+    moveMarkerAndSave();
+
+    /////////////////////////
     let map;
     let marker;
 
@@ -145,13 +228,15 @@
             zoom: 10,
         });
 
-        marker = new google.maps.Marker({
-            position: map.getCenter(),
-            map: map,
-            title: "คุณอยู่ที่นี่",
-        });
+        // marker = new google.maps.Marker({
+        //     position: map.getCenter(),
+        //     map: map,
+        //     title: "คุณอยู่ที่นี่",
+        // });
 
-        getUserLocation();
+        // getUserLocation();
+        const locationOverlay = new UserLocationOverlay(mockLatLng, map);
+
     }
 
     function getUserLocation() {
@@ -454,11 +539,11 @@
 
         applyTransform();
         // MOCK: สมมุติพิกัด GPS แรกเป็น 13.7367, 100.5232
-        // updateLocation(14.97472, 102.09785); //1.Thao Suranari
+        updateLocation(14.97472, 102.09785); //1.Thao Suranari
         // updateLocation(14.97473, 102.09851); //2.ประตูชุมพล
         // updateLocation(14.97468, 102.09778); //3.ศาลเจ้าพ่อไฟ
         // updateLocation(14.97417, 102.10017); //4.วัดบึง
-        updateLocation(14.97462, 102.10151); //5.ศาลเจ้าพ่อบุญไพศาล
+        // updateLocation(14.97462, 102.10151); //5.ศาลเจ้าพ่อบุญไพศาล
         // updateLocation(14.97505, 102.10199); //6.วัดซิกข์
         // updateLocation(14.97670, 102.09465); //7.หอศิลป์โคราช
         // updateLocation(14.97511, 102.09664); //8..ร้านไวน์วัฒนะ
@@ -468,7 +553,7 @@
         // updateLocation(14.97607323988759, 102.0935808441744);  //โรงเจฮะเซ่งตั๊ว
         // updateLocation(14.975709133283768, 102.10699843067903);  //วัดกลาง
 
-        
+
         // updateLocation(14.97506, 102.10594); //18.ศาลหลักเมือง
         // updateLocation(14.97904, 102.11032); //19.วัดอิสาน
         // updateLocation(14.97932, 102.11276); //20.กำแพงเมือง
@@ -486,10 +571,10 @@
 
         // แก้
         // updateLocation(14.970902276675258, 102.10231663015406); //25.วัดสระแก้ว
- 
 
-     
-     
+
+
+
 
 
         //     หรือ
@@ -516,6 +601,137 @@
         //     alert("เบราว์เซอร์ไม่รองรับ GPSกรุณาแชร์ที่อยู่ของตำแหน่งที่ถูกต้อง เปิด GPS ในเครื่อง หรือ กดปุ่มแชร์ตำแหน่งในโทรศัพท์ ที่ถูกต้อง ใช้ค่าจริงจากมือถือ");
         // }
     };
+
+    let isDraggingMap = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragInitialPosX = 0;
+    let dragInitialPosY = 0;
+
+    // ฟังก์ชันจัดการเริ่มลากเม้าส์หรือสัมผัส
+    function onDragStart(e) {
+        e.preventDefault();
+        isDraggingMap = true;
+
+        // เก็บตำแหน่งเริ่มต้นของเม้าส์/สัมผัส
+        if (e.type === "mousedown") {
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+        } else if (e.type === "touchstart") {
+            dragStartX = e.touches[0].clientX;
+            dragStartY = e.touches[0].clientY;
+        }
+
+        // เก็บตำแหน่งแผนที่ก่อนเริ่มลาก
+        dragInitialPosX = posX;
+        dragInitialPosY = posY;
+    }
+
+    // ฟังก์ชันจัดการตอนลากเม้าส์หรือสัมผัส
+    function onDragMove(e) {
+        if (!isDraggingMap) return;
+
+        let currentX, currentY;
+        if (e.type === "mousemove") {
+            currentX = e.clientX;
+            currentY = e.clientY;
+        } else if (e.type === "touchmove") {
+            currentX = e.touches[0].clientX;
+            currentY = e.touches[0].clientY;
+        }
+
+        const deltaX = currentX - dragStartX;
+        const deltaY = currentY - dragStartY;
+
+        // อัปเดตตำแหน่งแผนที่
+        posX = dragInitialPosX + deltaX;
+        posY = dragInitialPosY + deltaY;
+
+        applyTransform();
+    }
+
+    // ฟังก์ชันจัดการหยุดลาก
+    function onDragEnd(e) {
+        isDraggingMap = false;
+    }
+
+    // เพิ่ม event listeners
+    container.addEventListener("mousedown", onDragStart);
+    container.addEventListener("touchstart", onDragStart);
+
+    window.addEventListener("mousemove", onDragMove);
+    window.addEventListener("touchmove", onDragMove);
+
+    window.addEventListener("mouseup", onDragEnd);
+    window.addEventListener("touchend", onDragEnd);
+
+
+    // ตัวแปรช่วยสำหรับ pinch zoom
+    let lastTouchDist = 0;
+
+    wrapper.addEventListener('wheel', (e) => {
+        e.preventDefault();
+
+        const zoomIntensity = 0.1;
+
+        if (e.deltaY < 0) {
+            // zoom in
+            scale = Math.min(3, scale + zoomIntensity);
+        } else {
+            // zoom out
+            scale = Math.max(0.5, scale - zoomIntensity);
+        }
+
+        // ปรับตำแหน่งให้ zoom ที่ cursor
+        const rect = wrapper.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+
+        posX -= (offsetX - posX) * zoomIntensity * (e.deltaY < 0 ? -1 : 1);
+        posY -= (offsetY - posY) * zoomIntensity * (e.deltaY < 0 ? -1 : 1);
+
+        applyTransform();
+    }, {
+        passive: false
+    });
+
+    // ฟังก์ชันช่วยคำนวณระยะห่าง 2 จุดสัมผัส
+    function getTouchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    wrapper.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            lastTouchDist = getTouchDistance(e.touches);
+        }
+    }, {
+        passive: false
+    });
+
+    wrapper.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+
+            const currentDist = getTouchDistance(e.touches);
+            const diff = currentDist - lastTouchDist;
+            const zoomIntensity = 0.005;
+
+            if (Math.abs(diff) > 1) {
+                if (diff > 0) {
+                    scale = Math.min(3, scale + zoomIntensity * diff);
+                } else {
+                    scale = Math.max(0.5, scale + zoomIntensity * diff);
+                }
+
+                applyTransform();
+                lastTouchDist = currentDist;
+            }
+        }
+    }, {
+        passive: false
+    });
     </script>
 </body>
 

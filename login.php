@@ -15,6 +15,19 @@
         padding: 0;
     }
 
+    /* สำหรับ Chrome, Safari, Edge */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* สำหรับ Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+
     body {
         background-color: white;
         display: flex;
@@ -65,7 +78,8 @@
         border-radius: 30px;
     }
 
-    .input-field:focus, .input-field:hover {
+    .input-field:focus,
+    .input-field:hover {
         border: none;
         outline: none;
         box-shadow: 0;
@@ -147,28 +161,22 @@
         <img src="img/Login.jpg" alt="elderly">
         <h1 style="color: #695956;"><span>กรุณากรอกชื่อ</span></h1>
         <br>
-        <form method="POST" action="verify_otp.php" style="text-align: center;"> 
-        <div class="input-container">
-                <i class="fa-solid fa-user"></i>
-                <input class="input-field" type="text" name="username" placeholder="ชื่อผู้ใช้งาน" required autocomplete="off">
-
-            </div>
-
+        <form method="POST" action="login_process.php" style="text-align: center;">
             <div class="input-container">
-                <i class="fa-solid fa-key"></i>
-                <input class="input-field" type="text"name="otp" placeholder="รหัสผ่าน OTP" required>
-
+                <i class="fa-solid fa-user"></i>
+                <input class="input-field" type="text" name="firstname" placeholder="ชื่อจริง" required
+                    autocomplete="off">
             </div>
-
-            <div style="text-align: right; width: 90%; margin: 5px auto 15px;">
-                <a href="forgot-password.php"
-                    style="font-size: 20px; color: orange; text-decoration: none;">ลืมรหัสผ่าน?</a>
+            <div class="input-container">
+                <i class="fa-solid fa-user"></i>
+                <input class="input-field" type="text" name="lastname" placeholder="นามสกุล" required>
             </div>
-
+            <div class="input-container">
+                <i class="fa-solid fa-weight-scale"></i>
+                <input class="input-field" type="number" name="weight" placeholder="น้ำหนัก" required>
+            </div>
+            <br>
             <button class="btn" type="submit">เข้าสู่ระบบ</button><br><br>
-            <p style="font-size: 20px;">
-                <a href="register.php" style="text-decoration: none; color: black;">ลงทะเบียน</a>
-            </p>
         </form>
     </div>
 </body>

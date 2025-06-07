@@ -134,12 +134,12 @@
 
         <div class="form-wrapper">
             <div class="form-container">
-            <div id="error-alert" class="alert alert-danger d-none" role="alert"></div>
+                <div id="error-alert" class="alert alert-danger d-none" role="alert"></div>
 
-                <input type="text" class="input-field" placeholder="ชื่อผู้ใช้งาน" required>
-                <input type="text" class="input-field" placeholder="ชื่อจริง" required>
-                <input type="text" class="input-field" placeholder="นามสกุล" required>
-                <input type="tel" class="input-field" placeholder="เบอร์โทรศัพท์" required>
+                <input type="text" id="username" class="input-field" placeholder="ชื่อผู้ใช้งาน" required>
+                <input type="text" id="firstname" class="input-field" placeholder="ชื่อจริง" required>
+                <input type="text" id="lastname" class="input-field" placeholder="นามสกุล" required>
+                <input type="tel" id="phone" class="input-field" placeholder="เบอร์โทรศัพท์" required>
                 <button class="btn-submit">ส่งรหัส OTP</button>
                 <div class="note">กดปุ่มนี้ เราจะส่งรหัส 4 หลัก <br> ไปยัง SMS ของคุณ</div>
             </div>
@@ -164,9 +164,43 @@
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
+    <script>
+document.querySelector('.btn-submit').addEventListener('click', function () {
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!phone) {
+        showError('กรุณากรอกเบอร์โทรศัพท์');
+        return;
+    }
+
+    fetch('send_otp.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ phone: phone })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            const otpModal = new bootstrap.Modal(document.getElementById('otpSuccessModal'));
+            otpModal.show();
+        } else {
+            showError(data.message || 'เกิดข้อผิดพลาด');
+        }
+    })
+    .catch(() => {
+        showError('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    });
+});
+
+function showError(msg) {
+    const errorAlert = document.getElementById('error-alert');
+    errorAlert.textContent = msg;
+    errorAlert.classList.remove('d-none');
+}
+</script>
+
+
 
 </body>
 

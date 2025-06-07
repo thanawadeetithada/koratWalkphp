@@ -10,7 +10,6 @@
 
     <style>
     body {
-        font-family: 'Prompt', sans-serif;
         margin: 0;
     }
 
@@ -93,13 +92,17 @@
     }
 
     .button {
-        background-color: #5c8df6;
+        background-color: #5371cb;
         color: white;
-        font-size: 30px;
+        font-weight: bold;
+        font-size: 25px;
         padding: 20px 30px;
+        width: auto;
         border: none;
         border-radius: 40px;
         cursor: pointer;
+        display: block;
+        margin: 0 auto;
     }
 
     .fa-phone {
