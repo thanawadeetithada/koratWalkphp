@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="th">
 
@@ -144,10 +150,9 @@
     <script>
     // Log session data to browser console
     console.log("User ID:", <?= json_encode($_SESSION['user_id'] ?? null) ?>);
-    console.log("Username:", <?= json_encode($_SESSION['username'] ?? '') ?>);
     console.log("Firstname:", <?= json_encode($_SESSION['firstname'] ?? '') ?>);
     console.log("Lastname:", <?= json_encode($_SESSION['lastname'] ?? '') ?>);
-    console.log("Phone:", <?= json_encode($_SESSION['phone'] ?? '') ?>);
+    console.log("Weight:", <?= json_encode($_SESSION['weight'] ?? '') ?>);
 </script>
 </body>
 </html>

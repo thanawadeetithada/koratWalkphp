@@ -1,10 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    // ถ้าไม่ล็อกอิน ให้ redirect ไปหน้า login
-    // header("Location: login.php");
-    // exit();
-      $_SESSION['user_id'] = 1;
+    header('Location: index.php');
+    exit;
 }
 ?>
 
@@ -343,13 +341,23 @@ if (!isset($_SESSION['user_id'])) {
         userMarker.style.top = position.y + 'px';
     }
 
-    // 🔧 Dummy function แทนที่ด้วยฟังก์ชันจริงตามระบบพิกัดของแผนที่คุณ
     function convertLatLngToPixel(lat, lng) {
-        // แปลงค่าพิกัดเป็นตำแหน่งบนภาพ (ต้องรู้ว่าภาพขนาดเท่าไหร่ + lat/lng ครอบคลุมอะไร)
+        const topLat = 14.980050;
+        const leftLng = 102.090380;
+        const bottomLat = 14.970218;
+        const rightLng = 102.114147;
+
+        const mapImg = document.getElementById("map");
+        const imageWidth = mapImg.clientWidth;
+        const imageHeight = mapImg.clientHeight;
+
+        const x = ((lng - leftLng) / (rightLng - leftLng)) * imageWidth;
+        const y = ((topLat - lat) / (topLat - bottomLat)) * imageHeight;
+
         return {
-            x: 1000,
-            y: 800
-        }; // ตัวอย่าง mock
+            x,
+            y
+        };
     }
 
 
@@ -364,9 +372,10 @@ if (!isset($_SESSION['user_id'])) {
             }, 5000);
             document.getElementById('start-btn').textContent = '⏸️ หยุดเดินทาง';
         } else {
+
             clearInterval(trackingInterval);
             trackingInterval = null;
-            document.getElementById('start-btn').textContent = '🚶‍♂️ เริ่มเดินทาง';
+            window.location.href = 'summary.php';
         }
     }
 

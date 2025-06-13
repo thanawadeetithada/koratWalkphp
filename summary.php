@@ -1,3 +1,46 @@
+<?php
+session_start();
+require 'db.php';
+
+if (!isset($_SESSION['user_id'])) {
+    die("กรุณาเข้าสู่ระบบก่อน");
+}
+
+$user_id = intval($_SESSION['user_id']);
+
+$sql = "SELECT latitude, longitude FROM gps_logs WHERE user_id = $user_id ORDER BY timestamp ASC";
+$result = $conn->query($sql);
+
+$coords = [];
+while ($row = $result->fetch_assoc()) {
+    $coords[] = ['lat' => $row['latitude'], 'lon' => $row['longitude']];
+}
+
+function haversine($lat1, $lon1, $lat2, $lon2) {
+    $R = 6371000; // เมตร
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLon = deg2rad($lon2 - $lon1);
+    $a = sin($dLat/2) * sin($dLat/2) +
+        cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+        sin($dLon/2) * sin($dLon/2);
+    $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+    return $R * $c;
+}
+
+$distance = 0;
+for ($i = 1; $i < count($coords); $i++) {
+    $distance += haversine(
+        $coords[$i-1]['lat'], $coords[$i-1]['lon'],
+        $coords[$i]['lat'], $coords[$i]['lon']
+    );
+}
+
+$step_length = 0.75; // เมตร/ก้าว
+$steps = round($distance / $step_length);
+$calories = $steps * 0.04; // สมมติ
+
+?>
+
 <!DOCTYPE html>
 <html lang="th">
 
@@ -5,7 +48,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>บันทึกการเดิน</title>
-    <?php session_start(); ?>
     <script>
     window.userId = <?= $_SESSION['user_id'] ?? 0 ?>;
     </script>
@@ -110,7 +152,7 @@
         font-size: 20px;
     }
 
-     .modal-body {
+    .modal-body {
         font-size: 25px;
     }
     </style>
@@ -128,24 +170,23 @@
 
     <div class="card-text">
         <div class="icon"></div>
-            <div class="row mb-2">
-                <div class="col-8 label text-start">ระยะทาง</div>
-                <div class="col-2 label text-start" id="distance">-</div>
-                <div class="col-2 label text-end">เมตร</div>
-            </div>
+        <div class="row mb-2">
+            <div class="col-8 label text-start">ระยะทาง</div>
+            <div class="col-2 label text-start" id="distance"><?= round($distance, 2) ?></div>
+            <div class="col-2 label text-end">เมตร</div>
+        </div>
 
-            <div class="row mb-2">
-                <div class="col-8 label text-start">จำนวนการเดิน</div>
-                <div class="col-2 label text-start" id="steps">-</div>
-                <div class="col-2 label text-end">ก้าว</div>
-            </div>
+        <div class="row mb-2">
+            <div class="col-8 label text-start">จำนวนการเดิน</div>
+            <div class="col-2 label text-start" id="steps"><?= $steps ?></div>
+            <div class="col-2 label text-end">ก้าว</div>
+        </div>
 
-            <div class="row mb-2">
-                <div class="col-8 label text-start">แคลอรี่ที่เผาผลาญ</div>
-                <div class="col-2 label text-start" id="calories">-</div>
-                <div class="col-2 label text-end">แคลอรี่</div>
-            </div>
-
+        <div class="row mb-2">
+            <div class="col-8 label text-start">แคลอรี่ที่เผาผลาญ</div>
+            <div class="col-2 label text-start" id="calories"><?= round($calories, 2) ?></div>
+            <div class="col-2 label text-end">แคลอรี่</div>
+        </div>
 
     </div>
 
@@ -185,20 +226,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const distance = urlParams.get('distance');
-    const steps = urlParams.get('steps');
-    const calories = urlParams.get('calories');
+    const distance = <?= round($distance, 2) ?>;
+    const steps = <?= $steps ?>;
+    const calories = <?= round($calories, 2) ?>;
+    const userId = window.userId || 0;
 
-    // แสดงผล
-    document.getElementById('distance').innerText = distance;
-    document.getElementById('steps').innerText = steps;
-    document.getElementById('calories').innerText = calories;
-
-    // กดบันทึก
     document.querySelector('.button').addEventListener('click', () => {
-        const userId = window.userId || 0;
-
         fetch('save_summary.php', {
                 method: 'POST',
                 headers: {

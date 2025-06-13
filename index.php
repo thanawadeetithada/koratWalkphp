@@ -1,10 +1,27 @@
-<!DOCTYPE html>
+<?php
+session_start();
+
+if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+    // มี user_id แปลว่ายังล็อกอินอยู่
+    header('Location: menu.php');
+    exit;
+}
+?><!DOCTYPE html>
 <html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KoratWalk</title>
+    <!-- Manifest for Add to Home Screen -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- iOS support -->
+    <link rel="apple-touch-icon" href="img/Home.jpg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#5371cb">
+
     <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
     <style>
     * {
@@ -62,6 +79,14 @@
             <button class="btn">เริ่ม</button>
         </form>
     </div>
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("Service Worker registered"))
+            .catch(err => console.error("SW registration failed:", err));
+    }
+    </script>
+
 </body>
 
 </html>
