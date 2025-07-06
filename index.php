@@ -6,7 +6,8 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
     header('Location: menu.php');
     exit;
 }
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="th">
 
 <head>
@@ -14,11 +15,14 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KoratWalk</title>
     <!-- Manifest for Add to Home Screen -->
-    <link rel="manifest" href="manifest.json">
+   <link rel="manifest" href="/manifest.json">
 
-    <!-- iOS support -->
-    <link rel="apple-touch-icon" href="img/Home.jpg">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" href="/img/Home.jpg" sizes="192x192">
+    <link rel="icon" href="/img/Home.jpg" sizes="512x512">
+
+    <!-- สำหรับ iOS -->
+    <link rel="apple-touch-icon" href="/img/Home.jpg" sizes="180x180">
+    <meta name="apple-mobile-web-app-title" content="koratWalk">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#5371cb">
 

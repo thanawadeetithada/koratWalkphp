@@ -130,6 +130,9 @@ if (!isset($_SESSION['user_id'])) {
     <div id="map-wrapper">
         <div id="map-container">
             <img id="map" src="map/map.png" alt="map" style="width: 2000px">
+            <canvas id="route-canvas" width="2000" height="1500"
+                style="position: absolute; top: 0; left: 0; pointer-events: none;"></canvas>
+
             <div id="user-location" class="location-icon">📍</div>
             <div id="custom-pins"></div> <!-- ✅ เพิ่มตรงนี้ -->
         </div>
@@ -292,6 +295,10 @@ if (!isset($_SESSION['user_id'])) {
 
                 // ✅ ส่งไปบันทึกในฐานข้อมูล
                 saveLocationToDB(lat, lng);
+                drawRoute([{
+                    lat,
+                    lng
+                }, ...destinations]);
             },
             function(error) {
                 console.error("เกิดข้อผิดพลาดในการดึงตำแหน่ง:", error);
@@ -300,7 +307,7 @@ if (!isset($_SESSION['user_id'])) {
                 } else if (error.code === 2) {
                     alert("ไม่สามารถระบุตำแหน่งได้ กรุณาเปิด GPS หรือเชื่อมต่ออินเทอร์เน็ต");
                 } else if (error.code === 3) {
-                    alert("การดึงตำแหน่งใช้เวลานานเกินไป กรุณาลองใหม่");
+                    //alert("การดึงตำแหน่งใช้เวลานานเกินไป กรุณาลองใหม่");
                 }
             }, {
                 enableHighAccuracy: true,
@@ -309,6 +316,21 @@ if (!isset($_SESSION['user_id'])) {
             }
         );
     }
+
+    const customPinsDiv = document.getElementById("custom-pins");
+    destinations.forEach(dest => {
+        const {
+            x,
+            y
+        } = convertLatLngToPixel(dest.lat, dest.lng);
+        const pin = document.createElement("div");
+        pin.className = "custom-pin";
+        pin.innerHTML = "📌";
+        pin.style.left = x + "px";
+        pin.style.top = y + "px";
+        customPinsDiv.appendChild(pin);
+    });
+
 
     function saveLocationToDB(lat, lng) {
         fetch('save_gps.php', {
@@ -369,7 +391,7 @@ if (!isset($_SESSION['user_id'])) {
 
             trackingInterval = setInterval(() => {
                 getLocation();
-            }, 5000);
+            }, 10000);
             document.getElementById('start-btn').textContent = '⏸️ หยุดเดินทาง';
         } else {
 
@@ -401,6 +423,13 @@ if (!isset($_SESSION['user_id'])) {
     }
 
     window.onload = () => {
+        const startPoint = {
+            lat: 14.9780,
+            lng: 102.0920
+        }; // จุดเริ่มต้น
+
+        drawRoute([startPoint, ...destinations]); // วาดเส้นทั้งหมด
+
         //เปลี่ยนเป็น ณขณะนั้นจริงๆ
         const lat = 14.974626403278286;
         const lng = 102.09936300888151;
@@ -447,6 +476,41 @@ if (!isset($_SESSION['user_id'])) {
         mapContainer.style.top = `${newTop}px`;
         mapContainer.style.transform = `scale(${scale})`;
     }
+
+    function drawRoute(path) {
+        const canvas = document.getElementById("route-canvas");
+        const ctx = canvas.getContext("2d");
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // เคลียร์เส้นเก่า
+        ctx.beginPath();
+
+        path.forEach((point, index) => {
+            const {
+                x,
+                y
+            } = convertLatLngToPixel(point.lat, point.lng);
+            if (index === 0) {
+                ctx.moveTo(x, y); // จุดเริ่มต้น
+            } else {
+                ctx.lineTo(x, y); // ลากไปยังจุดถัดไป
+            }
+        });
+
+        ctx.strokeStyle = "orange";
+        ctx.lineWidth = 6;
+        ctx.lineJoin = "round";
+        ctx.stroke();
+    }
+
+    const destinations = [{
+            lat: 14.9755,
+            lng: 102.0955
+        },
+        {
+            lat: 14.9730,
+            lng: 102.0985
+        } // จุดหมาย
+    ];
     </script>
 
 </body>

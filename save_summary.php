@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $calories = $_POST['calories'] ?? 0;
 
     if ($user_id && is_numeric($distance)) {
-        $stmt = $conn->prepare("INSERT INTO walk_summary (user_id, distance, steps, calories, created_at) VALUES (?, ?, ?, ?, NOW())");
+        $stmt = $conn->prepare("INSERT INTO walk_summary (user_id, distance, steps, calories, created_at) VALUES (?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 14 HOUR))");
         $stmt->bind_param("idii", $user_id, $distance, $steps, $calories);
         if ($stmt->execute()) {
             echo json_encode(['success' => true]);

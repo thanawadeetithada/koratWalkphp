@@ -300,7 +300,7 @@ if (!isset($_SESSION['user_id'])) {
                 } else if (error.code === 2) {
                     alert("ไม่สามารถระบุตำแหน่งได้ กรุณาเปิด GPS หรือเชื่อมต่ออินเทอร์เน็ต");
                 } else if (error.code === 3) {
-                    alert("การดึงตำแหน่งใช้เวลานานเกินไป กรุณาลองใหม่");
+                    //alert("การดึงตำแหน่งใช้เวลานานเกินไป กรุณาลองใหม่");
                 }
             }, {
                 enableHighAccuracy: true,
@@ -369,7 +369,7 @@ if (!isset($_SESSION['user_id'])) {
 
             trackingInterval = setInterval(() => {
                 getLocation();
-            }, 5000);
+            }, 10000);
             document.getElementById('start-btn').textContent = '⏸️ หยุดเดินทาง';
         } else {
 

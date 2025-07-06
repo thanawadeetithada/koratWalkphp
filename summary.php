@@ -27,12 +27,14 @@ function haversine($lat1, $lon1, $lat2, $lon2) {
     return $R * $c;
 }
 
+function haversine_with_filter($prev, $curr) {
+    $dist = haversine($prev['lat'], $prev['lon'], $curr['lat'], $curr['lon']);
+    return $dist > 2 ? $dist : 0;  // กรองการเคลื่อนไหวที่น้อยกว่า 2 เมตร
+}
+
 $distance = 0;
 for ($i = 1; $i < count($coords); $i++) {
-    $distance += haversine(
-        $coords[$i-1]['lat'], $coords[$i-1]['lon'],
-        $coords[$i]['lat'], $coords[$i]['lon']
-    );
+    $distance += haversine_with_filter($coords[$i - 1], $coords[$i]);
 }
 
 $step_length = 0.75; // เมตร/ก้าว
@@ -98,7 +100,7 @@ $calories = $steps * 0.04; // สมมติ
     .card-text {
         border-radius: 20px;
         width: 100%;
-        max-width: 400px;
+        max-width: 500px;
         padding: 20px;
         margin-bottom: 50px;
     }
@@ -106,9 +108,30 @@ $calories = $steps * 0.04; // สมมติ
     .label {
         font-weight: bold;
         color: #333;
-        font-size: 25px;
+        font-size: clamp(20px, 2.5vw, 30px);
         padding: 0;
     }
+
+    .value {
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: bold;
+        color: #000;
+    }
+
+    .value-step {
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: bold;
+        color: #000;
+        padding: 0 16px;
+    }
+
+    .value-calories {
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: bold;
+        color: #000;
+        padding: 0 16px;
+    }
+
 
     .button {
         background-color: #4a65d3;
@@ -170,22 +193,22 @@ $calories = $steps * 0.04; // สมมติ
 
     <div class="card-text">
         <div class="icon"></div>
-        <div class="row mb-2">
-            <div class="col-8 label text-start">ระยะทาง</div>
-            <div class="col-2 label text-start" id="distance"><?= round($distance, 2) ?></div>
-            <div class="col-2 label text-end">เมตร</div>
+        <div class="row mb-2 align-items-center">
+            <div class="col-6 label text-start">ระยะทาง</div>
+            <div class="col-4 text-end value" id="distance"><?= round($distance, 2) ?></div>
+            <div class="col-2 label text-start">&nbsp;เมตร</div>
         </div>
 
-        <div class="row mb-2">
-            <div class="col-8 label text-start">จำนวนการเดิน</div>
-            <div class="col-2 label text-start" id="steps"><?= $steps ?></div>
-            <div class="col-2 label text-end">ก้าว</div>
+        <div class="row mb-2 align-items-center">
+            <div class="col-6 label text-start">จำนวนการเดิน</div>
+            <div class="col-4 label text-end value-step" id="steps"><?= $steps ?></div>
+            <div class="col-2 label text-start">ก้าว</div>
         </div>
 
-        <div class="row mb-2">
-            <div class="col-8 label text-start">แคลอรี่ที่เผาผลาญ</div>
-            <div class="col-2 label text-start" id="calories"><?= round($calories, 2) ?></div>
-            <div class="col-2 label text-end">แคลอรี่</div>
+        <div class="row mb-2 align-items-center">
+            <div class="col-6 label text-start">แคลอรี่ที่เผาผลาญ</div>
+            <div class="col-4 label text-end value-calories" id="calories"><?= round($calories, 2) ?></div>
+            <div class="col-2 label text-start">แคลอรี่</div>
         </div>
 
     </div>
